@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 
 
 class Message(BaseModel):
@@ -10,6 +10,15 @@ class Salary(BaseModel):
     salary: int
     bonus: int
     taxes: int
+
+    @field_validator("salary", "bonus", "taxes")
+    def must_be_int(cls, value, field):
+        if not value:
+            raise ValueError(
+                f"error: 3 fields expected (salary, bonus, taxes). You forgot:{value}"
+            )
+        if not isinstance(value, int):
+            raise ValueError("Error: expected numbers, got strings")
 
 
 app = FastAPI()
