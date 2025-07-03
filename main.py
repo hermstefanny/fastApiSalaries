@@ -19,6 +19,7 @@ class Salary(BaseModel):
             )
         if not isinstance(value, int):
             raise ValueError("Error: expected numbers, got strings")
+        return value
 
 
 app = FastAPI()
@@ -41,7 +42,7 @@ async def multiply_number(number: int) -> dict:
 
 @app.post("/salary_computation")
 async def compute_salary(data: Salary) -> dict:
-    if data:
-        total = data.salary + data.bonus - data.taxes
+
+    total = data.salary + data.bonus - data.taxes
 
     return {"message": f"Your total is {total}"}
